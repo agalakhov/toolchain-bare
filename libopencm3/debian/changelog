@@ -1,0 +1,5 @@
+libopencm3 (0.1) UNRELEASED; urgency=low
+
+  * Initial release.
+
+ -- Alexey Galakhov <agalakhov@gmail.com>  Mon, 29 Jul 2013 02:03:11 +0600

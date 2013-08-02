@@ -1,0 +1,5 @@
+tars = binutils_tar newlib_tar gdb_tar gcc_tar
+binutils_tar: url = http://ftp.gnu.org/gnu/binutils/binutils_tar
+newlib_tar: url = ftp://sourceware.org/pub/newlib/newlib_tar
+gdb_tar: url = http://ftp.gnu.org/gnu/gdb/gdb_tar
+gcc_tar: url = http://ftp.gnu.org/gnu/gcc/gcc-gcc_version/gcc_tar

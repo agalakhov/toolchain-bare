@@ -1,0 +1,5 @@
+#!/bin/sh
+
+debian/rules clean
+debian/rules build-bootstrap
+fakeroot debian/rules binary-bootstrap

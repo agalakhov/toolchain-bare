@@ -1,0 +1,12 @@
+libopencm3 packaged for Debian by Alexey Galakhov <agalakhov@gmail.com>
+
+Copyright (C) 2009 Uwe Hermann <uwe@hermann-uwe.de>
+Copyright (C) 2012 Piotr Esden-Tempski <piotr@esden.net>
+
+This library is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+On Debian systems, the complete text of the LGPL can be found in
+/usr/share/common-licenses/LGPL-3

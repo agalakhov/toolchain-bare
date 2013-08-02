@@ -1,0 +1,48 @@
+#!/usr/bin/make -f
+
+deb_vers = $(shell dpkg-parsechangelog --count 1 | grep ^Version: | cut -c 10-)
+git_vers = $(shell cd libopencm3 && git log -1 --pretty='%ci' | cut -c 1-10 | sed 's/-//g')
+version = 0.0+$(git_vers)-$(deb_vers)
+
+.PHONY: clean
+clean:
+	dh_testdir
+	make -C libopencm3 clean
+	dh_clean
+
+.PHONY: build build-arch build-indep
+build: build-arch build-indep
+build-arch:
+build-indep: build-indep-stamp
+
+build-indep-stamp:
+	dh_testdir
+	make -C libopencm3
+	touch $@
+
+.PHONY: install install-arch install-indep
+install: install-arch install-indep
+install-arch:
+install-indep: install-indep-stamp
+
+install-indep-stamp: build-indep-stamp
+	dh_testdir
+	make -C libopencm3 install DESTDIR=`pwd`/debian/libopencm3/usr/
+	find debian/libopencm3/usr/arm-none-eabi/include \
+		-name '*.yaml' -o -name '*.dox' | xargs rm
+	touch $@
+
+.PHONY: binary binary-arch binary-indep
+binary: binary-arch binary-indep
+binary-arch:
+binary-indep: install-indep
+
+binary-indep:
+	dh_testdir -i
+	dh_testroot -i
+	dh_installdeb -i
+	dh_lintian -i
+	dh_installdocs -i
+	dh_gencontrol -i -- -v$(version)
+	dh_md5sums -i
+	dh_builddeb -i

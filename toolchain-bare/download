@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+
+include debian/urls
+
+.PHONY: all
+all: $(tars)
+	md5sum -c debian/tars.md5
+
+$(tars): %:
+	wget -c -O $@.part $(url)
+	mv $@.part $@

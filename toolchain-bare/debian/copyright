@@ -1,0 +1,6 @@
+toolchain packaged for Debian by Alexey Galakhov <agalakhov@gmail.com>
+
+binutils, gcc and gdb Copyright (c) Free Software Foundation
+newlib Copyright (c) Red Hat, Incorporated
+
+Please see individual source directories for copyright notices.

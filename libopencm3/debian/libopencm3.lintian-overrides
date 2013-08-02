@@ -1,0 +1,6 @@
+libopencm3 binary: arch-independent-package-contains-binary-or-object
+libopencm3 binary: non-standard-dir-in-usr usr/arm-none-eabi/
+libopencm3 binary: file-in-unusual-dir usr/arm-none-eabi/include/*/*.h
+libopencm3 binary: file-in-unusual-dir usr/arm-none-eabi/lib/*.a
+libopencm3 binary: file-in-unusual-dir usr/arm-none-eabi/lib/*.ld
+libopencm3 binary: file-in-unusual-dir usr/arm-none-eabi/share/libopencm3/scripts/*.scr

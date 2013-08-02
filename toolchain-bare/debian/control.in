@@ -1,0 +1,54 @@
+Source: toolchain-bare
+Section: devel
+Priority: extra
+Maintainer: Alexey Galakhov <agalakhov@gmail.com>
+Standards-Version: 3.9.4
+Build-Depends: debhelper (>= 9.0), gawk, m4, autotools-dev, flex, bison,
+ libgmp-dev, libmpc-dev, libmpfr-dev, libisl-dev, libcloog-isl-dev,
+ binutils-TARGET, gcc-TARGET, newlib-TARGET
+
+Package: bootstrap-toolchain-TARGET
+Architecture: any
+Section: oldlibs
+Priority: extra
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Provides: binutils-TARGET, gcc-TARGET, newlib-TARGET
+Description: toolchain BOOTSTRAP for embedded processors (TARGET)
+ This package contains temporary bootstrap toolchain for TARGET.
+ It contains very minimal versions of binutils-binutils_version,
+ gcc-gcc_version and newlib-newlib_version.
+ PLEASE REMOVE THIS PACKAGE AFTER USE.
+
+Package: binutils-TARGET
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Replaces: bootstrap-toolchain-TARGET
+Conflicts: bootstrap-toolchain-TARGET
+Description: toolchain for embedded processors (TARGET)
+ This package contains GNU binutils for TARGET.
+
+Package: newlib-TARGET
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: gcc-gcc_vers-TARGET
+Replaces: bootstrap-toolchain-TARGET
+Conflicts: bootstrap-toolchain-TARGET
+Description: toolchain for embedded processors (TARGET)
+ This package contains newlib C library for TARGET.
+
+Package: gdb-TARGET
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: toolchain for embedded processors (TARGET)
+ This package contains GNU debugger for TARGET.
+
+Package: gcc-gcc_vers-TARGET
+Architecture: any
+Depends: binutils-TARGET, ${shlibs:Depends}, ${misc:Depends}
+Provides: gcc-TARGET
+Recommends: newlib-TARGET
+Replaces: bootstrap-toolchain-TARGET
+Conflicts: bootstrap-toolchain-TARGET
+Description: toolchain for embedded processors (TARGET)
+ This package contains GNU C compiler for TARGET.
+

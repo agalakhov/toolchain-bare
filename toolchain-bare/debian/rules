@@ -1,0 +1,119 @@
+#!/usr/bin/make -f
+
+include debian/versions
+
+packages_arch = binutils gdb gcc
+packages_indep = newlib
+packages_all = $(packages_arch) $(packages_indep)
+TARGET = $(shell cat debian/target)
+
+version = $(shell dpkg-parsechangelog --count 1 | grep ^Version: | cut -c 10-)
+
+src = $*-$($*_version)
+pak = $*-$(TARGET)
+pakvers = $($*_version)-$(version)
+
+# FIXME support c++ and other languages
+langs = c
+
+%-bootstrap-stamp: src = bootstrap-src
+%-bootstrap-stamp: pak = bootstrap-toolchain-$(TARGET)
+%-bootstrap-stamp: pakvers = $(version)
+%-bootstrap-stamp: langs = c
+%-gcc-stamp: pak = gcc-$(gcc_vers)-$(TARGET)
+dhflags = --parallel -S autoconf -D $(src) -B build-$(src)-$(TARGET) -p$(pak)
+
+cfflags = --prefix=/usr --target=$(TARGET) \
+    --enable-multiarch --with-system-zlib --disable-rpath \
+    --enable-plugins --enable-lto --with-gnu-as --with-gnu-ld \
+    --enable-multilib --with-dwarf2 --enable-gold=default \
+    --enable-decimal-float=yes --enable-fixed-point \
+    --disable-newlib-supplied-syscalls \
+    --enable-languages=$(langs)
+
+# FIXME gcc will not compile without this due to sloppy format handling
+dhopts = hardening=-format
+
+every = $(patsubst %,$(2)-%-stamp,$(packages_$(1)))
+
+.PHONY: verify
+verify: verify-stamp
+verify-stamp:
+	md5sum -c debian/tars.md5
+	touch $@
+
+.PHONY: clean
+clean:
+	dh_testdir
+	rm -rf $(addsuffix -*/,$(packages_all)) bootstrap-src/ build-*/
+	dh_clean
+
+.PHONY: unpack
+unpack: $(call every,all,unpack)
+unpack-%-stamp: verify-stamp
+unpack-%-stamp: $($*_tar)
+	dh_testdir
+	tar -x -f $($*_tar)
+	touch $@
+
+unpack-bootstrap-stamp: $(newlib_tar) $(binutils_tar) $(gcc_tar)
+	dh_testdir
+	mkdir -p $(src)
+	cd $(src) && tar -x --strip-components=1 -f ../$(newlib_tar)
+	cd $(src) && tar -x --strip-components=1 -f ../$(binutils_tar)
+	cd $(src) && tar -x --strip-components=1 -f ../$(gcc_tar)
+	touch $@
+
+.PHONY: build build-arch build-indep build-bootstrap
+build: build-arch build-indep
+build-indep: $(call every,indep,build)
+build-arch: $(call every,arch,build)
+build-bootstrap: build-bootstrap-stamp
+
+configure-%-stamp: unpack-%-stamp
+	dh_testdir
+	DEB_BUILD_MAINT_OPTIONS=$(dhopts) dh_auto_configure $(dhflags) -- $(cfflags)
+	touch $@
+
+build-%-stamp: configure-%-stamp
+	dh_testdir
+	dh_auto_build $(dhflags)
+	touch $@
+
+.PHONY: install install-arch install-indep install-bootstrap
+install: install-arch install-indep
+install-indep: $(call every,indep,install)
+install-arch: $(call every,arch,install)
+install-bootstrap: install-bootstrap-stamp
+
+install-%-stamp: build-%-stamp
+	dh_testdir
+	dh_testroot
+	dh_auto_install $(dhflags) --destdir=debian/$(pak)
+	cd debian/$(pak) && (find . -type f | grep -v $(TARGET) | xargs rm)
+	touch $@
+
+.PHONY: binary binary-arch binary-indep binary-bootstrap
+binary: binary-arch binary-indep
+binary-indep: $(call every,indep,binary)
+binary-arch: $(call every,arch,binary)
+binary-bootstrap: binary-bootstrap-stamp
+
+binary-%-stamp: install-%-stamp
+	dh_testdir
+	dh_testroot
+	dh_link -p$(pak)
+	dh_strip -p$(pak)
+	dh_fixperms -p$(pak)
+	dh_compress -p$(pak)
+	dh_makeshlibs -p$(pak)
+	dh_shlibdeps -p$(pak)
+	dh_installdeb -p$(pak)
+	dh_gencontrol -p$(pak) -- -v$(pakvers)
+	dh_md5sums -p$(pak)
+	dh_builddeb -p$(pak)
+	touch $@
+
+.PHONY: bootstrap
+bootstrap: binary-bootstrap
+
