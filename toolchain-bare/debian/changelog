@@ -1,4 +1,11 @@
-toolchain-bare (0.1) UNRELEASED; urgency=low
+toolchain-bare (0.1.1) unstable; urgency=low
+
+  * Do not compile with --enable-multilib since it is default anyway
+  * Revert default linker to bfd since gold may be buggy
+
+ -- Alexey Galakhov <agalakhov@gmail.com>  Mon, 05 Aug 2013 16:25:57 +0600
+
+toolchain-bare (0.1) unstable; urgency=low
 
   * Initial release.
 

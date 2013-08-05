@@ -26,7 +26,7 @@ dhflags = --parallel -S autoconf -D $(src) -B build-$(src)-$(TARGET) -p$(pak)
 cfflags = --prefix=/usr --target=$(TARGET) \
     --enable-multiarch --with-system-zlib --disable-rpath \
     --enable-plugins --enable-lto --with-gnu-as --with-gnu-ld \
-    --enable-multilib --with-dwarf2 --enable-gold=default \
+    --with-dwarf2 --enable-gold \
     --enable-decimal-float=yes --enable-fixed-point \
     --disable-newlib-supplied-syscalls \
     --enable-languages=$(langs)
