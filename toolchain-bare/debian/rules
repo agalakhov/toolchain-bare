@@ -34,6 +34,7 @@ cfflags = --prefix=/usr --target=$(TARGET) \
 # FIXME gcc will not compile without this due to sloppy format handling
 dhopts = hardening=-format
 
+pwd = $(shell pwd)
 every = $(patsubst %,$(2)-%-stamp,$(packages_$(1)))
 
 .PHONY: verify
@@ -89,7 +90,8 @@ install-bootstrap: install-bootstrap-stamp
 install-%-stamp: build-%-stamp
 	dh_testdir
 	dh_testroot
-	dh_auto_install $(dhflags) --destdir=debian/$(pak)
+	cd build-$(src)-$(TARGET) && make install DESTDIR=$(pwd)/debian/$(pak)
+	rm build-$*-stamp
 	cd debian/$(pak) && (find . -type f | grep -v $(TARGET) | xargs rm)
 	touch $@
 
