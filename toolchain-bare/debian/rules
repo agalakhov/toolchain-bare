@@ -34,6 +34,8 @@ cfflags = --prefix=/usr --target=$(TARGET) \
 # FIXME gcc will not compile without this due to sloppy format handling
 dhopts = hardening=-format
 
+nostrip = usr/$(TARGET)/lib crtbegin.o crtend.o crti.o crtn.o libgcc.a libgcov.a
+
 pwd = $(shell pwd)
 every = $(patsubst %,$(2)-%-stamp,$(packages_$(1)))
 
@@ -105,7 +107,7 @@ binary-%-stamp: install-%-stamp
 	dh_testdir
 	dh_testroot
 	dh_link -p$(pak)
-	dh_strip -p$(pak)
+	dh_strip -p$(pak) $(addprefix -X,$(nostrip))
 	dh_fixperms -p$(pak)
 	dh_compress -p$(pak)
 	dh_makeshlibs -p$(pak)

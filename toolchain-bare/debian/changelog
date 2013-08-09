@@ -1,3 +1,9 @@
+toolchain-bare (0.1.2) unstable; urgency=low
+
+  * Do not strip target libraries
+
+ -- Alexey Galakhov <agalakhov@gmail.com>  Fri, 09 Aug 2013 18:13:14 +0600
+
 toolchain-bare (0.1.1) unstable; urgency=low
 
   * Do not compile with --enable-multilib since it is default anyway
