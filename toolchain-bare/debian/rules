@@ -31,9 +31,6 @@ cfflags = --prefix=/usr --target=$(TARGET) \
     --disable-newlib-supplied-syscalls \
     --enable-languages=$(langs)
 
-# FIXME gcc will not compile without this due to sloppy format handling
-dhopts = hardening=-format
-
 nostrip = usr/$(TARGET)/lib crtbegin.o crtend.o crti.o crtn.o libgcc.a libgcov.a
 
 pwd = $(shell pwd)
@@ -94,7 +91,7 @@ build-bootstrap: build-bootstrap-stamp
 
 configure-%-stamp: patch-%-stamp
 	dh_testdir
-	DEB_BUILD_MAINT_OPTIONS=$(dhopts) dh_auto_configure $(dhflags) -- $(cfflags)
+	dh_auto_configure $(dhflags) -- $(cfflags)
 	touch $@
 
 build-%-stamp: configure-%-stamp

@@ -1,0 +1,117 @@
+Index: b/gcc-4.8.1/gcc/dwarf2asm.c
+===================================================================
+--- a/gcc-4.8.1/gcc/dwarf2asm.c	2013-01-11 02:38:27.000000000 +0600
++++ b/gcc-4.8.1/gcc/dwarf2asm.c	2013-08-15 20:47:30.000000000 +0600
+@@ -162,7 +162,7 @@
+ #ifndef ASM_OUTPUT_DWARF_VMS_DELTA
+   /* VMS Delta is only special on ia64-vms, but this function also gets
+      called on alpha-vms so it has to do something sane.  */
+-  dw2_asm_output_delta (size, lab1, lab2, comment);
++  dw2_asm_output_delta (size, lab1, lab2, "%s", comment);
+ #else
+   ASM_OUTPUT_DWARF_VMS_DELTA (asm_out_file, size, lab1, lab2);
+   if (flag_debug_asm && comment)
+Index: b/gcc-4.8.1/gcc/lto-wrapper.c
+===================================================================
+--- a/gcc-4.8.1/gcc/lto-wrapper.c	2013-02-27 13:28:09.000000000 +0600
++++ b/gcc-4.8.1/gcc/lto-wrapper.c	2013-08-15 20:47:30.000000000 +0600
+@@ -192,10 +192,10 @@
+       if (err != 0)
+ 	{
+ 	  errno = err;
+-	  fatal_perror (errmsg);
++	  fatal_perror ("%s", errmsg);
+ 	}
+       else
+-	fatal (errmsg);
++	fatal ("%s", errmsg);
+     }
+ 
+   return pex;
+Index: b/gcc-4.8.1/gcc/opts.c
+===================================================================
+--- a/gcc-4.8.1/gcc/opts.c	2013-03-05 12:01:13.000000000 +0600
++++ b/gcc-4.8.1/gcc/opts.c	2013-08-15 20:47:30.000000000 +0600
+@@ -1004,7 +1004,7 @@
+ 		      if (* (const char **) flag_var != NULL)
+ 			snprintf (new_help + strlen (new_help),
+ 				  sizeof (new_help) - strlen (new_help),
+-				  * (const char **) flag_var);
++				  "%s", * (const char **) flag_var);
+ 		    }
+ 		  else if (option->var_type == CLVC_ENUM)
+ 		    {
+@@ -1018,7 +1018,7 @@
+ 			arg = _("[default]");
+ 		      snprintf (new_help + strlen (new_help),
+ 				sizeof (new_help) - strlen (new_help),
+-				arg);
++				"%s", arg);
+ 		    }
+ 		  else
+ 		    sprintf (new_help + strlen (new_help),
+Index: b/gcc-4.8.1/gcc/tree-sra.c
+===================================================================
+--- a/gcc-4.8.1/gcc/tree-sra.c	2013-05-23 19:25:23.000000000 +0600
++++ b/gcc-4.8.1/gcc/tree-sra.c	2013-08-15 20:47:30.000000000 +0600
+@@ -3767,7 +3767,7 @@
+ {
+   basic_block bb;
+ 
+-  fprintf (dump_file, str);
++  fprintf (dump_file, "%s", str);
+   FOR_BB_BETWEEN (bb, ENTRY_BLOCK_PTR, EXIT_BLOCK_PTR, next_bb)
+     {
+       fprintf (f, "%4i  %i   ", bb->index, bitmap_bit_p (final_bbs, bb->index));
+Index: b/gcc-4.8.1/gcc/tree-ssa-uninit.c
+===================================================================
+--- a/gcc-4.8.1/gcc/tree-ssa-uninit.c	2013-05-07 16:32:41.000000000 +0600
++++ b/gcc-4.8.1/gcc/tree-ssa-uninit.c	2013-08-15 20:47:30.000000000 +0600
+@@ -611,7 +611,7 @@
+ {
+   size_t i, j;
+   vec<use_pred_info_t> one_pred_chain;
+-  fprintf (dump_file, msg);
++  fprintf (dump_file, "%s", msg);
+   print_gimple_stmt (dump_file, usestmt, 0, 0);
+   fprintf (dump_file, "is guarded by :\n");
+   /* do some dumping here:  */
+Index: b/gcc-4.8.1/libcpp/expr.c
+===================================================================
+--- a/gcc-4.8.1/libcpp/expr.c	2013-01-15 00:13:59.000000000 +0600
++++ b/gcc-4.8.1/libcpp/expr.c	2013-08-15 20:47:30.000000000 +0600
+@@ -626,10 +626,10 @@
+ 
+ 	  if (CPP_OPTION (pfile, c99))
+             cpp_warning_with_line (pfile, CPP_W_LONG_LONG, virtual_location,
+-				   0, message);
++				   0, "%s", message);
+           else
+             cpp_pedwarning_with_line (pfile, CPP_W_LONG_LONG,
+-				      virtual_location, 0, message);
++				      virtual_location, 0, "%s", message);
+         }
+ 
+       result |= CPP_N_INTEGER;
+Index: b/gcc-4.8.1/libcpp/macro.c
+===================================================================
+--- a/gcc-4.8.1/libcpp/macro.c	2013-01-15 00:13:59.000000000 +0600
++++ b/gcc-4.8.1/libcpp/macro.c	2013-08-15 20:47:30.000000000 +0600
+@@ -2962,7 +2962,7 @@
+ 	     function-like macros, but not at the end.  */
+ 	  if (following_paste_op)
+ 	    {
+-	      cpp_error (pfile, CPP_DL_ERROR, paste_op_error_msg);
++	      cpp_error (pfile, CPP_DL_ERROR, "%s", paste_op_error_msg);
+ 	      return false;
+ 	    }
+ 	  break;
+@@ -2975,7 +2975,7 @@
+ 	     function-like macros, but not at the beginning.  */
+ 	  if (macro->count == 1)
+ 	    {
+-	      cpp_error (pfile, CPP_DL_ERROR, paste_op_error_msg);
++	      cpp_error (pfile, CPP_DL_ERROR, "%s", paste_op_error_msg);
+ 	      return false;
+ 	    }
+ 
