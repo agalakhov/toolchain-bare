@@ -3,7 +3,7 @@ Section: devel
 Priority: extra
 Maintainer: Alexey Galakhov <agalakhov@gmail.com>
 Standards-Version: 3.9.4
-Build-Depends: debhelper (>= 9.0), gawk, m4, autotools-dev, flex, bison,
+Build-Depends: debhelper (>= 9.0), quilt, gawk, m4, autotools-dev, flex, bison,
  texinfo (<< 5.0), libz-dev, libncurses5-dev,
  libgmp-dev, libmpc-dev, libmpfr-dev, libisl-dev, libcloog-isl-dev,
  binutils-TARGET, gcc-TARGET, newlib-TARGET

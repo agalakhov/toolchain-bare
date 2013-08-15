@@ -53,8 +53,7 @@ clean:
 
 .PHONY: unpack
 unpack: $(call every,all,unpack)
-unpack-%-stamp: verify-stamp
-unpack-%-stamp: $($*_tar)
+unpack-%-stamp: verify-stamp $($*_tar)
 	dh_testdir
 	tar -x -f $($*_tar)
 	touch $@
@@ -67,13 +66,33 @@ unpack-bootstrap-stamp: $(newlib_tar) $(binutils_tar) $(gcc_tar)
 	cd $(src) && tar -x --strip-components=1 -f ../$(gcc_tar)
 	touch $@
 
+.PHONY: patch
+patch: $(call every,all,patch)
+patch-%-stamp: patches/series-% unpack-%-stamp
+	dh_testdir
+	cd $(src) && QUILT_PATCHES=../patches/ QUILT_SERIES=series-$* quilt --quiltrc /dev/null push -a
+	touch $@
+patch-%-stamp: unpack-%-stamp
+	dh_testdir
+	@echo No patches for $*
+	touch $@
+
+patch-bootstrap-stamp: unpack-bootstrap-stamp
+	dh_testdir
+	echo > $(src)/series
+	if [ -f patches/series-binutils ]; then cat patches/series-binutils >> $(src)/series; fi
+	if [ -f patches/series-gcc ]; then cat patches/series-gcc >> $(src)/series; fi
+	if [ -f patches/series-newlib ]; then cat patches/series-newlib >> $(src)/series; fi
+	cd $(src) && QUILT_PATCHES=../patches/ quilt --quiltrc /dev/null push -a
+	touch $@
+
 .PHONY: build build-arch build-indep build-bootstrap
 build: build-arch build-indep
 build-indep: $(call every,indep,build)
 build-arch: $(call every,arch,build)
 build-bootstrap: build-bootstrap-stamp
 
-configure-%-stamp: unpack-%-stamp
+configure-%-stamp: patch-%-stamp
 	dh_testdir
 	DEB_BUILD_MAINT_OPTIONS=$(dhopts) dh_auto_configure $(dhflags) -- $(cfflags)
 	touch $@
