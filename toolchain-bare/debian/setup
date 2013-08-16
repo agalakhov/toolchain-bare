@@ -3,6 +3,7 @@
 set -e
 
 target="`cat debian/target`"
+version="`dpkg-parsechangelog --count 1 | grep ^Version: | cut -c 10-`"
 
 packages="binutils newlib gdb gcc"
 
@@ -25,7 +26,7 @@ for P in $packages; do
     echo "${P}_version=$V" >> debian/versions
 done
 
-m4opts="`awk '{ if (!/^#/) print "-D"$0}' debian/versions` -DTARGET=$target"
+m4opts="`awk '{ if (!/^#/) print "-D"$0}' debian/versions` -DTARGET=$target -DVERSION=$version"
 
 for f in debian/urls debian/control ; do
     echo -ne "$stamp" > $f
