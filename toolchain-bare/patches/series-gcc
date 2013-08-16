@@ -1,1 +1,2 @@
 gcc/fix-warnings.patch -p2
+gcc/arm-with-multilib-list.patch -p2

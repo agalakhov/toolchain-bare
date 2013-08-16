@@ -6,14 +6,15 @@ Standards-Version: 3.9.4
 Build-Depends: debhelper (>= 9.0), quilt, gawk, m4, autotools-dev, flex, bison,
  texinfo (<< 5.0), libz-dev, libncurses5-dev,
  libgmp-dev, libmpc-dev, libmpfr-dev, libisl-dev, libcloog-isl-dev,
- binutils-TARGET, gcc-TARGET, newlib-TARGET
+ binutils-TARGET | bootstrap-toolchain-TARGET (>= VERSION),
+ gcc-TARGET (>= gcc_version-VERSION) | bootstrap-toolchain-TARGET (>= VERSION),
+ newlib-TARGET | bootstrap-toolchain-TARGET (>= VERSION)
 
 Package: bootstrap-toolchain-TARGET
 Architecture: any
 Section: oldlibs
 Priority: extra
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Provides: binutils-TARGET, gcc-TARGET, newlib-TARGET
 Description: toolchain BOOTSTRAP for embedded processors (TARGET)
  This package contains temporary bootstrap toolchain for TARGET.
  It contains very minimal versions of binutils-binutils_version,

@@ -16,6 +16,9 @@ pakvers = $($*_version)-$(version)
 # FIXME support c++ and other languages
 langs = c
 
+# FIXME other than ARM?
+multilibs = armv6-m,armv7-m,armv7e-m,armv7-r,armv7-a
+
 %-bootstrap-stamp: src = bootstrap-src
 %-bootstrap-stamp: pak = bootstrap-toolchain-$(TARGET)
 %-bootstrap-stamp: pakvers = $(version)
@@ -29,6 +32,7 @@ cfflags = --prefix=/usr --target=$(TARGET) \
     --with-dwarf2 --enable-gold \
     --enable-decimal-float=yes --enable-fixed-point \
     --disable-newlib-supplied-syscalls \
+    --with-multilib-list=$(multilibs) \
     --enable-languages=$(langs)
 
 nostrip = usr/$(TARGET)/lib crtbegin.o crtend.o crti.o crtn.o libgcc.a libgcov.a

@@ -1,0 +1,178 @@
+Index: b/gcc-4.8.1/gcc/config/arm/t-mlibs
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ b/gcc-4.8.1/gcc/config/arm/t-mlibs	2013-08-15 21:40:44.000000000 +0600
+@@ -0,0 +1,85 @@
++# A set of predefined MULTILIB for different ARM targets.
++# Through the configure option --with-multilib-list, user can customize the
++# final MULTILIB implementation.
++
++comma := ,
++space :=
++space +=
++
++MULTILIB_OPTIONS   = mthumb/marm
++MULTILIB_DIRNAMES  = thumb arm
++MULTILIB_OPTIONS  += march=armv6s-m/march=armv7-m/march=armv7e-m/march=armv7-r/march=armv7-a
++MULTILIB_DIRNAMES += armv6-m armv7-m armv7e-m armv7-r armv7-a
++MULTILIB_OPTIONS  += mfloat-abi=softfp/mfloat-abi=hard
++MULTILIB_DIRNAMES += softfp fpu
++MULTILIB_OPTIONS  += mfpu=fpv4-sp-d16/mfpu=vfpv3-d16/mfpu=neon
++MULTILIB_DIRNAMES += fpv4-sp-d16 vfpv3-d16 neon
++
++MULTILIB_MATCHES   = march?armv6s-m=mcpu?cortex-m0
++MULTILIB_MATCHES  += march?armv6s-m=mcpu?cortex-m0plus
++MULTILIB_MATCHES  += march?armv6s-m=mcpu?cortex-m1
++MULTILIB_MATCHES  += march?armv6s-m=march?armv6-m
++MULTILIB_MATCHES  += march?armv7-m=mcpu?cortex-m3
++MULTILIB_MATCHES  += march?armv7e-m=mcpu?cortex-m4
++MULTILIB_MATCHES  += march?armv7-r=mcpu?cortex-r4
++MULTILIB_MATCHES  += march?armv7-r=mcpu?cortex-r4f
++MULTILIB_MATCHES  += march?armv7-r=mcpu?cortex-r5
++MULTILIB_MATCHES  += march?armv7-a=mcpu?cortex-a5
++MULTILIB_MATCHES  += march?armv7-a=mcpu?cortex-a7
++MULTILIB_MATCHES  += march?armv7-a=mcpu?cortex-a8
++MULTILIB_MATCHES  += march?armv7-a=mcpu?cortex-a9
++MULTILIB_MATCHES  += march?armv7-a=mcpu?cortex-a15
++
++MULTILIB_EXCEPTIONS =
++
++MULTILIB_REQUIRED  = mthumb
++MULTILIB_REQUIRED += marm
++MULTILIB_REQUIRED += mfloat-abi=hard
++
++MULTILIB_OSDIRNAMES  = mthumb=!thumb
++MULTILIB_OSDIRNAMES += marm=!arm
++MULTILIB_OSDIRNAMES += mfloat-abi.hard=!fpu
++
++ifneq (,$(findstring armv6-m,$(subst $(comma),$(space),$(with_multilib_list))))
++MULTILIB_REQUIRED   += mthumb/march=armv6s-m
++MULTILIB_OSDIRNAMES += mthumb/march.armv6s-m=!armv6-m
++endif
++
++ifneq (,$(findstring armv7-m,$(subst $(comma),$(space),$(with_multilib_list))))
++MULTILIB_REQUIRED   += mthumb/march=armv7-m
++MULTILIB_OSDIRNAMES += mthumb/march.armv7-m=!armv7-m
++endif
++
++ifneq (,$(findstring armv7e-m,$(subst $(comma),$(space),$(with_multilib_list))))
++MULTILIB_REQUIRED   += mthumb/march=armv7e-m
++MULTILIB_REQUIRED   += mthumb/march=armv7e-m/mfloat-abi=softfp/mfpu=fpv4-sp-d16
++MULTILIB_REQUIRED   += mthumb/march=armv7e-m/mfloat-abi=hard/mfpu=fpv4-sp-d16
++MULTILIB_OSDIRNAMES += mthumb/march.armv7e-m=!armv7e-m
++MULTILIB_OSDIRNAMES += mthumb/march.armv7e-m/mfloat-abi.hard/mfpu.fpv4-sp-d16=!armv7e-m/fpu
++MULTILIB_OSDIRNAMES += mthumb/march.armv7e-m/mfloat-abi.softfp/mfpu.fpv4-sp-d16=!armv7e-m/softfp
++endif
++
++ifneq (,$(findstring armv7-r,$(subst $(comma),$(space),$(with_multilib_list))))
++MULTILIB_REQUIRED   += mthumb/march=armv7-r
++MULTILIB_REQUIRED   += mthumb/march=armv7-r/mfloat-abi=softfp/mfpu=vfpv3-d16
++MULTILIB_REQUIRED   += mthumb/march=armv7-r/mfloat-abi=hard/mfpu=vfpv3-d16
++MULTILIB_OSDIRNAMES += mthumb/march.armv7-r=!armv7-r/thumb
++MULTILIB_OSDIRNAMES += mthumb/march.armv7-r/mfloat-abi.hard/mfpu.vfpv3-d16=!armv7-r/thumb/fpu
++MULTILIB_OSDIRNAMES += mthumb/march.armv7-r/mfloat-abi.softfp/mfpu.vfpv3-d16=!armv7-r/thumb/softfp
++MULTILIB_OSDIRNAMES += marm/march.armv7-r=!armv7-r/thumb
++MULTILIB_OSDIRNAMES += marm/march.armv7-r/mfloat-abi.hard/mfpu.vfpv3-d16=!armv7-r/thumb/fpu
++MULTILIB_OSDIRNAMES += marm/march.armv7-r/mfloat-abi.softfp/mfpu.vfpv3-d16=!armv7-r/thumb/softfp
++endif
++
++ifneq (,$(findstring armv7-a,$(subst $(comma),$(space),$(with_multilib_list))))
++MULTILIB_REQUIRED   += mthumb/march=armv7-a
++MULTILIB_REQUIRED   += mthumb/march=armv7-a/mfloat-abi=softfp/mfpu=neon
++MULTILIB_REQUIRED   += mthumb/march=armv7-a/mfloat-abi=hard/mfpu=neon
++MULTILIB_REQUIRED   += mthumb/march=armv7-a/mfloat-abi=softfp/mfpu=vfpv3-d16
++MULTILIB_REQUIRED   += mthumb/march=armv7-a/mfloat-abi=hard/mfpu=vfpv3-d16
++MULTILIB_OSDIRNAMES += mthumb/march.armv7-a=!armv7-a/thumb
++MULTILIB_OSDIRNAMES += mthumb/march.armv7-a/mfloat-abi.hard/mfpu.neon=!armv7-a/thumb/fpu/neon
++MULTILIB_OSDIRNAMES += mthumb/march.armv7-a/mfloat-abi.softfp/mfpu.neon=!armv7-a/thumb/softfp/neon
++MULTILIB_OSDIRNAMES += mthumb/march.armv7-a/mfloat-abi.hard/mfpu.vfpv3-d16=!armv7-a/thumb/fpu/vfpv3-d16
++MULTILIB_OSDIRNAMES += mthumb/march.armv7-a/mfloat-abi.softfp/mfpu.vfpv3-d16=!armv7-a/thumb/softfp/vfpv3-d16
++endif
+Index: b/gcc-4.8.1/gcc/config.gcc
+===================================================================
+--- a/gcc-4.8.1/gcc/config.gcc	2013-03-13 15:47:41.000000000 +0600
++++ b/gcc-4.8.1/gcc/config.gcc	2013-08-15 21:40:44.000000000 +0600
+@@ -917,7 +917,7 @@
+ 	case ${target} in
+ 	arm*-*-eabi*)
+ 	  tm_file="$tm_file newlib-stdint.h"
+-	  tmake_file="${tmake_file} arm/t-bpabi"
++	  tmake_file="${tmake_file} arm/t-bpabi arm/t-mlibs"
+ 	  use_gcc_stdint=wrap
+ 	  ;;
+ 	arm*-*-rtems*)
+Index: b/gcc-4.8.1/gcc/configure
+===================================================================
+--- a/gcc-4.8.1/gcc/configure	2013-05-08 17:36:36.000000000 +0600
++++ b/gcc-4.8.1/gcc/configure	2013-08-15 21:40:54.000000000 +0600
+@@ -753,6 +753,7 @@
+ LN_S
+ AWK
+ SET_MAKE
++with_multilib_list
+ REPORT_BUGS_TEXI
+ REPORT_BUGS_TO
+ PKGVERSION
+@@ -1660,7 +1661,7 @@
+   --with-specs=SPECS      add SPECS to driver command-line processing
+   --with-pkgversion=PKG   Use PKG in the version string in place of "GCC"
+   --with-bugurl=URL       Direct users to URL to report a bug
+-  --with-multilib-list    select multilibs (SH and x86-64 only)
++  --with-multilib-list    select multilibs (ARM, SH and x86-64 only)
+   --with-gnu-ld           assume the C compiler uses GNU ld default=no
+   --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
+   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
+@@ -7397,6 +7398,7 @@
+ fi
+ 
+ 
++
+ # -------------------------
+ # Checks for other programs
+ # -------------------------
+@@ -17828,7 +17830,7 @@
+   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
+   lt_status=$lt_dlunknown
+   cat > conftest.$ac_ext <<_LT_EOF
+-#line 17831 "configure"
++#line 17833 "configure"
+ #include "confdefs.h"
+ 
+ #if HAVE_DLFCN_H
+@@ -17934,7 +17936,7 @@
+   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
+   lt_status=$lt_dlunknown
+   cat > conftest.$ac_ext <<_LT_EOF
+-#line 17937 "configure"
++#line 17939 "configure"
+ #include "confdefs.h"
+ 
+ #if HAVE_DLFCN_H
+Index: b/gcc-4.8.1/gcc/configure.ac
+===================================================================
+--- a/gcc-4.8.1/gcc/configure.ac	2013-05-08 17:36:36.000000000 +0600
++++ b/gcc-4.8.1/gcc/configure.ac	2013-08-15 21:40:45.000000000 +0600
+@@ -839,9 +839,10 @@
+ [enable_languages=c])
+ 
+ AC_ARG_WITH(multilib-list,
+-[AS_HELP_STRING([--with-multilib-list], [select multilibs (SH and x86-64 only)])],
++[AS_HELP_STRING([--with-multilib-list], [select multilibs (ARM, SH and x86-64 only)])],
+ :,
+ with_multilib_list=default)
++AC_SUBST(with_multilib_list)
+ 
+ # -------------------------
+ # Checks for other programs
+Index: b/gcc-4.8.1/gcc/Makefile.in
+===================================================================
+--- a/gcc-4.8.1/gcc/Makefile.in	2013-05-21 22:00:49.000000000 +0600
++++ b/gcc-4.8.1/gcc/Makefile.in	2013-08-15 21:40:44.000000000 +0600
+@@ -526,6 +526,7 @@
+ lang_specs_files=@lang_specs_files@
+ lang_tree_files=@lang_tree_files@
+ target_cpu_default=@target_cpu_default@
++with_multilib_list=@with_multilib_list@
+ OBJC_BOEHM_GC=@objc_boehm_gc@
+ extra_modes_file=@extra_modes_file@
+ extra_opt_files=@extra_opt_files@
