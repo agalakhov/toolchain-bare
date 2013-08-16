@@ -24,6 +24,7 @@ Description: toolchain BOOTSTRAP for embedded processors (TARGET)
 Package: binutils-TARGET
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: gcc-TARGET
 Replaces: bootstrap-toolchain-TARGET
 Conflicts: bootstrap-toolchain-TARGET
 Description: toolchain for embedded processors (TARGET)
@@ -49,6 +50,7 @@ Architecture: any
 Depends: binutils-TARGET, ${shlibs:Depends}, ${misc:Depends}
 Provides: gcc-TARGET
 Recommends: newlib-TARGET
+Suggests: gdb-TARGET
 Replaces: bootstrap-toolchain-TARGET
 Conflicts: bootstrap-toolchain-TARGET
 Description: toolchain for embedded processors (TARGET)

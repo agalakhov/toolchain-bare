@@ -26,6 +26,7 @@ Description: toolchain BOOTSTRAP for embedded processors (arm-none-eabi)
 Package: binutils-arm-none-eabi
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: gcc-arm-none-eabi
 Replaces: bootstrap-toolchain-arm-none-eabi
 Conflicts: bootstrap-toolchain-arm-none-eabi
 Description: toolchain for embedded processors (arm-none-eabi)
@@ -51,6 +52,7 @@ Architecture: any
 Depends: binutils-arm-none-eabi, ${shlibs:Depends}, ${misc:Depends}
 Provides: gcc-arm-none-eabi
 Recommends: newlib-arm-none-eabi
+Suggests: gdb-arm-none-eabi
 Replaces: bootstrap-toolchain-arm-none-eabi
 Conflicts: bootstrap-toolchain-arm-none-eabi
 Description: toolchain for embedded processors (arm-none-eabi)
