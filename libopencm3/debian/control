@@ -3,13 +3,13 @@ Section: libdevel
 Priority: extra
 Maintainer: Alexey Galakhov <agalakhov@gmail.com>
 Standards-Version: 3.9.4
-Build-Depends: debhelper (>= 9.0), gcc-arm-none-eabi, python, python-yaml, git
+Build-Depends: debhelper (>= 9.0), libnewlib-arm-none-eabi, gcc-arm-none-eabi, python, python-yaml, git
 
 Package: libopencm3
 Architecture: all
 Priority: extra
 Depends: ${misc:Depends}
-Recommends: gcc-arm-none-eabi, newlib-arm-none-eabi
+Recommends: gcc-arm-none-eabi, libnewlib-arm-none-eabi
 Description: library for ARM Cortex M processors
  libopencm3 is a library for ARM Cortex M0, Cortex M3 and Cortex M4 processors.
  It supports many popular targets, including the well-known STM32F103 MCU.

@@ -4,6 +4,11 @@ deb_vers = $(shell dpkg-parsechangelog --count 1 | grep ^Version: | cut -c 10-)
 git_vers = $(shell cd libopencm3 && git log -1 --pretty='%ci' | cut -c 1-10 | sed 's/-//g')
 version = 0.0+$(git_vers)-$(deb_vers)
 
+dest = $(shell pwd)/debian/libopencm3
+ocm3_incdir = $(dest)/usr/include/newlib
+ocm3_libdir = $(dest)/usr/lib/arm-none-eabi/newlib
+ocm3_sharedir = $(dest)/usr/share/libopencm3/scripts
+
 .PHONY: clean
 clean:
 	dh_testdir
@@ -27,9 +32,8 @@ install-indep: install-indep-stamp
 
 install-indep-stamp: build-indep-stamp
 	dh_testdir
-	make -C libopencm3 install DESTDIR=`pwd`/debian/libopencm3/usr/
-	find debian/libopencm3/usr/arm-none-eabi/include \
-		-name '*.yaml' -o -name '*.dox' | xargs rm
+	make -C libopencm3 install INCDIR=$(ocm3_incdir) LIBDIR=$(ocm3_libdir) SHAREDIR=$(ocm3_sharedir)
+	find $(ocm3_incdir) -name '*.yaml' -o -name '*.dox' | xargs rm
 	touch $@
 
 .PHONY: binary binary-arch binary-indep
