@@ -1,4 +1,10 @@
-libopencm3 (0.1) UNRELEASED; urgency=low
+libopencm3 (0.2) unstable; urgency=low
+
+  * Compatibility with Debian arm-gcc.
+
+ -- Alexey Galakhov <agalakhov@gmail.com>  Sat, 12 Apr 2014 21:41:04 +0600
+
+libopencm3 (0.1) unstable; urgency=low
 
   * Initial release.
 
